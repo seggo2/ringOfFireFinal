@@ -38,14 +38,9 @@ export class GameComponent {
     if (!this.pickCardAnimation) {
       this.currentCard = this.game?.stack.pop();
       this.pickCardAnimation = true;
-      if (this.game != null) {
-        this.game.currentPlayer = (this.game.currentPlayer ?? 0) + 1;
-      }
-      debugger
-      if (this.game?.currentPlayer == this.game?.players.length) {
-        if (this.game != null) {
-          this.game.currentPlayer = 0;
-        }
+      if (this.game) {
+        this.game.currentPlayer++;
+        this.game.currentPlayer = this.game.currentPlayer % this.game?.players.length;
       }
       setTimeout(() => {
         this.pickCardAnimation = false;
