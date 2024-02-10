@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "ringoffire-43b70": {
+      "hosting": {
+        "ringoffirefinal": [
+          "ringoffire-43b70"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "ringoffire-43b70"
+  }
+}

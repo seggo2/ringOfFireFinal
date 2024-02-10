@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ringOfFireFinal": {
+    "ringoffirefinal": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -63,10 +63,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "ringOfFireFinal:build:production"
+              "buildTarget": "ringoffirefinal:build:production"
             },
             "development": {
-              "buildTarget": "ringOfFireFinal:build:development"
+              "buildTarget": "ringoffirefinal:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -74,7 +74,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "ringOfFireFinal:build"
+            "buildTarget": "ringoffirefinal:build"
           }
         },
         "test": {
@@ -96,6 +96,23 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "version": 2
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "ringoffirefinal:build:production",
+              "serveTarget": "ringoffirefinal:serve:production"
+            },
+            "development": {
+              "buildTarget": "ringoffirefinal:build:development",
+              "serveTarget": "ringoffirefinal:serve:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }
