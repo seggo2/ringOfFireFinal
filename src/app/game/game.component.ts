@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Game } from '../../app/models/game';
 import { PlayerComponent } from '../player/player.component';
@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AddPlayerDialogComponent } from '../add-player-dialog/add-player-dialog.component';
 import { GameInfoComponent } from '../game-info/game-info.component';
+import { Firestore, doc, onSnapshot } from "firebase/firestore";
 
 @Component({
   selector: 'app-game',
@@ -20,8 +21,12 @@ import { GameInfoComponent } from '../game-info/game-info.component';
 })
 
 
+// firestore: Firestore = inject(Firestore)
+
 export class GameComponent {
+
   constructor(public dialog: MatDialog) { }
+
   pickCardAnimation = false;
   currentCard: string | undefined = '';
   game: Game | undefined;
