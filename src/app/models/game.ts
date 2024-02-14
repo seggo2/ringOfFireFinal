@@ -3,6 +3,8 @@ export class Game {
     public stack: string[] = [];
     public playedCards: string[] = [];
     public currentPlayer: number = 0;
+    public pickCardAnimation:boolean = false;
+    public currentCard:string = '';
 
     constructor() {
         this.stackFill()
@@ -19,10 +21,8 @@ export class Game {
         }
     }
 
-
     shuffle(array: string[]) {
         let currentIndex = array.length, randomIndex;
-
         while (currentIndex > 0) {
 
             randomIndex = Math.floor(Math.random() * currentIndex);
@@ -40,7 +40,9 @@ export class Game {
             players:this.players,
             stack:this.stack,
             playedCards:this.playedCards,
-            currentPlayer:this.currentPlayer
+            currentPlayer:this.currentPlayer,
+            currentCard:this.currentCard,
+            pickCardAnimation:this.pickCardAnimation,
         };
     }
 }

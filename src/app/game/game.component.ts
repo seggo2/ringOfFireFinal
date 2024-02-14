@@ -10,7 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AddPlayerDialogComponent } from '../add-player-dialog/add-player-dialog.component';
 import { GameInfoComponent } from '../game-info/game-info.component';
-import { Firestore, doc, onSnapshot, addDoc } from "@angular/fire/firestore";
+import { Firestore, doc, onSnapshot, addDoc, updateDoc } from "@angular/fire/firestore";
 import { collection } from 'firebase/firestore';
 import { ActivatedRoute } from '@angular/router';
 
@@ -27,33 +27,34 @@ export class GameComponent {
 
   constructor(private route: ActivatedRoute, public dialog: MatDialog) {
   }
-
-
-  pickCardAnimation = false;
-  currentCard: string | undefined = '';
-  game: Game | any;
+  game!: Game;
+  gameId!: string;
   firestore: Firestore = inject(Firestore)
 
   ngOnInit() {
-    this.updateJson()
+    this.newGame();
+    this.updateJson();
+  }
+
+  newGame() {
+    this.game = new Game();
   }
 
   updateJson() {
     this.route.params.subscribe((params) => {
-      var idGame: any = params['id'];
-      this.unsublist = onSnapshot(this.getSingleDocRef('games', idGame), (data: any) => {
+      let idGame: string = params['id'];
+      this.gameId = idGame;
+      this.unsublist = onSnapshot(this.getSingleDocRef('games', idGame), (data) => {
         let info: any = data.data();
-        console.log(info.currentPlayer);
-        console.log(info.stack);
-        
-          this.game.currentPlayer = info?.currentPlayer;
-          this.game.playedCards = info?.playedCards;
-          this.game.stack = info?.stack;
-          this.game.players = info?.players;
+        this.game.currentPlayer = info.currentPlayer;
+        this.game.playedCards = info.playedCards;
+        this.game.stack = info.stack;
+        this.game.players = info.players;
+        this.game.currentCard = info.currentCard;
+        this.game.pickCardAnimation = info.pickCardAnimation;
       })
     })
   }
-
 
   ngonDestroy() {
     this.unsublist();
@@ -64,21 +65,20 @@ export class GameComponent {
   }
 
   takeCard() {
-    if (!this.pickCardAnimation) {
-      this.currentCard = this.game?.stack.pop();
-      
-      this.pickCardAnimation = true;
-      if (this.game) {
-        this.game.currentPlayer++;
-        this.game.currentPlayer = this.game.currentPlayer % this.game?.players.length;
+    if (!this.game.pickCardAnimation) {
+      const poppedCard = this.game.stack.pop();
+      if (poppedCard !== undefined) {
+        this.game.pickCardAnimation = true;
+        this.game.currentCard = poppedCard;
       }
+      this.game.currentPlayer++;
+      this.game.currentPlayer = this.game.currentPlayer % this.game.players.length;
+      this.saveGame();
+      
       setTimeout(() => {
-        this.pickCardAnimation = false;
-        if (this.currentCard == undefined) {
-
-        } else {
-          this.game?.playedCards.push(this.currentCard);
-        }
+        this.game.pickCardAnimation = false;
+        this.game.playedCards.push(this.game.currentCard);
+        this.saveGame();
       }, 1001);
     }
   }
@@ -88,13 +88,19 @@ export class GameComponent {
 
     dialogRef.afterClosed().subscribe(name => {
       if (name && name.length > 0) {
-        this.game?.players.push(name);
+        this.game.players.push(name);
+        this.saveGame();
       }
     });
   }
 
   getSingleDocRef(colId: string, docId: string) {
     return doc(collection(this.firestore, colId), docId)
+  }
+
+  async saveGame() {
+    let docRef = this.getSingleDocRef('games', this.gameId)
+    await updateDoc(docRef, this.game.toJson())
   }
 }
 

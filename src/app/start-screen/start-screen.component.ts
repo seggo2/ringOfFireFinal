@@ -15,12 +15,12 @@ export class StartScreenComponent {
   firestore: Firestore = inject(Firestore)
 
   async newGame() {
-    let game = new Game
+    let game = new Game()
     this.addGame(game)
   }
   
   async addGame(game: Game) {
-    await addDoc(this.getGameRef(), game?.toJson()).then((gameinfo: any)=>{    
+    await addDoc(this.getGameRef(), game.toJson()).then((gameinfo)=>{    
       this.router.navigateByUrl('/game/'+gameinfo.id);
     })
   }

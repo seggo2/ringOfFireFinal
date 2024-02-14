@@ -1,4 +1,4 @@
-import {MatCardModule} from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
@@ -8,7 +8,7 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
   templateUrl: './game-info.component.html',
   styleUrl: './game-info.component.scss'
 })
-export class GameInfoComponent implements OnChanges{
+export class GameInfoComponent implements OnChanges {
   cardAction = [
     { title: 'Waterfall', description: 'Everyone has to start drinking at the same time. As soon as player 1 stops drinking, player 2 may stop drinking. Player 3 may stop as soon as player 2 stops drinking, and so on.' },
     { title: 'You', description: 'You decide who drinks' },
@@ -27,7 +27,7 @@ export class GameInfoComponent implements OnChanges{
 
   title = '';
   description = '';
-  @Input() card: undefined|string="";
+  @Input() card = "";
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.card) {
